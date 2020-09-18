@@ -1,5 +1,7 @@
 ﻿Add-Type -AssemblyName System.Windows.Forms
 
+$Location = Get-Location
+
 $MainWindow = New-Object system.Windows.Forms.Form
 $MainWindow.text = "Żubradmin"
 $MainWindow.Width = 640
@@ -10,22 +12,25 @@ $MainWindow.FormBorderStyle = 'FixedDialog'
 $SSHWindow = New-Object system.Windows.Forms.Form
 $SSHWindow.text = "Żubradmin - SSH"
 
-$ButtonSSH = New-Object System.Windows.Forms.Button
-$ButtonSSH.Text = "SSH"
-$ButtonSSH.Location = New-Object System.Drawing.Point(30,30)
-$ButtonSSH.Add_Click(
+$ButtonTasker = New-Object System.Windows.Forms.Button
+$ButtonTasker.Text = "Tasker"
+$ButtonTasker.Location = New-Object System.Drawing.Point(30,30)
+$ButtonTasker.Add_Click(
 {
-    $SSHWindow.Controls.AddRange(@($ButtonSSHConnect))
-    [void]$SSHWindow.ShowDialog()
+    $execute = $Location.Path + "\Zubradmin-Tasker.ps1"
+    Write-Host $execute
+    & ($execute)
 })
 
 $ButtonSSHExtern = New-Object System.Windows.Forms.Button
-$ButtonSSHExtern.Text = "SSH Extern"
+$ButtonSSHExtern.Text = "SSH"
 $ButtonSSHExtern.Location = New-Object System.Drawing.Point(30,60)
 $ButtonSSHExtern.Add_Click(
 {
     #Invoke-Expression (start powershell ((Split-Path $MyInvocation.InvocationName) + "\Zubradmin-SSH.ps1"))
-    & C:\Users\MRychlik\Desktop\Zubradmin-SSH.ps1
+    $execute = $Location.Path + "\Zubradmin-SSH.ps1"
+    Write-Host $execute
+    & ($execute)
 })
 
 
@@ -45,8 +50,7 @@ $ButtonCloseApp.Add_Click(
     $MainWindow.Close()
 })
 
-
-$MainWindow.Controls.AddRange(@($ButtonSSH,$ButtonCloseApp,$ButtonSSHExtern))
+$MainWindow.Controls.AddRange(@($ButtonCloseApp,$ButtonSSHExtern, $ButtonTasker))
 
 # Display the form
 [void]$MainWindow.ShowDialog()
