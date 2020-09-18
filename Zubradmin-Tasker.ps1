@@ -27,14 +27,16 @@ $LabelMain.Location = New-Object System.Drawing.Point(30,30)
 #Add flow layout panel
 $FlowLayoutPanel = New-Object System.Windows.Forms.FlowLayoutPanel
 $FlowLayoutPanel.FlowDirection=[System.Windows.Forms.FlowDirection]::LeftToRight
-$FlowLayoutPanel.Dock=[System.Windows.Forms.DockStyle]::Fill
+$FlowLayoutPanel.Dock=[System.Windows.Forms.DockStyle]::Right
+$FlowLayoutPanel.Dock=[System.Windows.Forms.DockStyle]::Bottom
 $FlowLayoutPanel.Width=600
-$FlowLayoutPanel.BorderStyle=[System.Windows.Forms.BorderStyle]::FixedSingle
+$FlowLayoutPanel.Height=400
+$FlowLayoutPanel.BorderStyle=[System.Windows.Forms.BorderStyle]::None
 $WindowTasker.Controls.Add($FlowLayoutPanel)
 $LocationX = 30
 $LocationY = 30
 $LocationAll = [string]$LocationX + "," + [string]$LocationY
-for ($repeat = 0; $repeat -le $Tasks_amount; $repeat++) {
+for ($repeat = 0; $repeat -lt $Tasks_amount; $repeat++) {
 
    <#
    $Obj = New-Object System.Windows.Forms.Button
@@ -47,8 +49,14 @@ for ($repeat = 0; $repeat -le $Tasks_amount; $repeat++) {
 
 
 
-   $Obj = New-Label $LocationAll '600,30' $Tasks_JSON.Tasks[$repeat].Description
-   $FlowLayoutPanel.Controls.Add($Obj)
+   $Task = New-Label $LocationAll '627,30' 
+   $ID = New-Label '0,0' '30,29' $Tasks_JSON.Tasks[$repeat].ID
+   $Reporter = New-Label '30,0' '100,30' $Tasks_JSON.Tasks[$repeat].Reporter
+   $Title = New-Label '130,0' '250,30' $Tasks_JSON.Tasks[$repeat].Title
+   $Status = New-Label '380,0' '130,30' $Tasks_JSON.Tasks[$repeat].Status
+   $ButtonOpenTask = New-Button '510,0' 'Podgląd'
+   $Task.Controls.AddRange(@($ID,$Reporter,$Title,$Status,$ButtonOpenTask))
+   $FlowLayoutPanel.Controls.Add($Task)
    $LocationY + $LocationY + 30
 }
 
@@ -65,12 +73,29 @@ function New-Label {
         [string]$Text = ''
     )
 
-    $o = New-Object Windows.Forms.Label
-    $o.Location = $Location
-    $o.Size     = $Size
-    $o.Text     = $Text
+    $label = New-Object Windows.Forms.Label
+    $label.Location = $Location
+    $label.Size     = $Size
+    $label.Text     = $Text
+    $label.BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
 
-    return $o
+    return $label
+}
+
+function New-Button {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$true)]
+        [string]$Location,
+        [Parameter(Mandatory=$true)]
+        [string]$Text = ''
+    )
+
+    $button = New-Object Windows.Forms.Button
+    $button.Location = $Location
+    $button.Text     = $Text
+
+    return $button
 }
 
 
@@ -79,8 +104,6 @@ function New-Label {
 
 
 $WindowTasker.Controls.AddRange(@($ButtonAddTask, $LabelMain))
-$WindowTasker.Controls.Add((New-Label '367,10' '85,20' $Tasks_JSON.Tasks[1].Description))
-#$WindowTasker.Controls.Add((New-Label $LocationAll '85,20' $Tasks_JSON.Tasks[2].Description))
 # Display the form
 
 
