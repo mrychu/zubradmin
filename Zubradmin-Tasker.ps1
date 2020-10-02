@@ -26,17 +26,7 @@ $ButtonAddTask.text = "Dodaj zadanie"
 $ButtonAddTask.Width = 100
 $ButtonAddTask.location = New-Object System.Drawing.Point(20,50)
 $ButtonAddTask.Add_Click({
-    $DropListClient = New-Object system.Windows.Forms.ComboBox
-    $DropListClient.text = ""
-    $DropListClient.width = 225
-    $DropListClient.autosize = $true
-    
-    @($Config_JSON.Reporters.Name) | ForEach-Object {[void] $DropListClient.Items.Add($_)}
-    $DropListClient.location = New-Object System.Drawing.Point(20,50)
-    $WindowAddTask = New-Object system.Windows.Forms.Form
-    $WindowAddTask.text = "Żubradmin - Dodaj Zadanie"
-    $WindowAddTask.Controls.Add($DropListClient)
-    $WindowAddTask.ShowDialog()
+    Add-Task
 })
 
 $DropListReporter = New-Object system.Windows.Forms.ComboBox
@@ -95,6 +85,50 @@ $ButtonFilter.Add_Click({
 Show-Task
 })
 
+function Add-Task {
+    $DropListClient = New-Object system.Windows.Forms.ComboBox
+    $DropListClient.text = ""
+    $DropListClient.width = 200
+    $DropListClient.autosize = $true
+    
+    @($Config_JSON.Reporters.Name) | ForEach-Object {[void] $DropListClient.Items.Add($_)}
+    $DropListClient.location = New-Object System.Drawing.Point(120,30)
+
+    $LabelReporter = New-Label '20,30' '80,20' 'Zgłaszający'
+
+    $TextTitle = New-Text '120,60' '200,20' $true "None"
+    $LabelTitle = New-Label '20,60' '80,20' 'Tytuł'
+
+    $CalenderResolve = New-Calender '120,90'
+    $LabelResolve = New-Label '20,90' '80,20' 'Rozwiązanie'
+
+
+    $TextDescription = New-Text '120,120' '200,100' $true "Vertical"
+    $LabelDescription = New-Label '20,120' '80,20' 'Opis'
+
+    
+    $WindowAddTask = New-Object system.Windows.Forms.Form
+    $WindowAddTask.Width = 400
+    $WindowAddTask.Height = 500
+    $WindowAddTask.text = "Żubradmin - Dodaj Zadanie"
+    $WindowAddTask.Controls.AddRange(@($DropListClient,$TextTitle,$LabelTitle,$LabelDescription,$TextDescription,$LabelReporter,$CalenderResolve,$LabelResolve ))
+    $WindowAddTask.ShowDialog()
+    
+}
+
+function New-Calender{
+    Param(
+        [Parameter(Mandatory=$true)]
+        [string]$Location    
+    )
+    $Calender = New-Object System.Windows.Forms.DateTimePicker
+    $Calender.Format = "Custom"
+    $Calender.CustomFormat = "yyyy-MM-dd";
+    $Calender.autosize            = $true
+    $Calender.location = $Location #New-Object System.Drawing.Point(370,20)
+    return $Calender
+    
+}
 function Pick-Date {
     Add-Type -AssemblyName System.Windows.Forms
     Add-Type -AssemblyName System.Drawing
@@ -132,7 +166,31 @@ function Pick-Date {
     }
     return $PickedDate
 }
-
+function New-Text {
+    Param(
+        [Parameter(Mandatory=$true)]
+        [string]$Location,
+        [Parameter(Mandatory=$true)]
+        [string]$Size,
+        [Parameter(Mandatory=$false)]
+        [string]$Multiline = '',
+        [Parameter(Mandatory=$false)]
+        [string]$Scrollbar = '',
+        [Parameter(Mandatory=$false)]
+        [string]$Text = ''
+        
+        
+         
+    )
+    
+    $TextObject = New-Object System.Windows.Forms.TextBox
+    $TextObject.Location = $Location
+    $TextObject.Size     = $Size
+    $TextObject.Text     = $Text
+    $TextObject.Multiline = $Multiline
+    $TextObject.Scrollbars = $Scrollbar
+    return $TextObject
+}
 function Show-Task{
     #Add flow layout panel
     $FlowLayoutPanel = New-Object System.Windows.Forms.FlowLayoutPanel
@@ -178,7 +236,6 @@ function Show-Task{
         $FlowLayoutPanel.Controls.Add($Task)
     }
 }
-
 function New-Label {
     [CmdletBinding()]
     Param(
@@ -199,7 +256,6 @@ function New-Label {
 
     return $label
 }
-
 function New-Label-Header {
     [CmdletBinding()]
     Param(
