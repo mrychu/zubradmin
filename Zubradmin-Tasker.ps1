@@ -106,13 +106,26 @@ function Add-Task {
     $TextDescription = New-Text '120,120' '200,100' $true "Vertical"
     $LabelDescription = New-Label '20,120' '80,20' 'Opis'
 
-    
+    $ButtonCancel = New-Button-Simple '20,300' "Anuluj" 
+    $ButtonCancel.Add_Click(
+    {
+        $WindowAddTask.Close()
+    })
+
+    $ButtonAdd = New-Button-Simple '150,300' "Dodaj" 
+    $ButtonAdd.Add_Click(
+    {
+        $WindowAddTask.Close()
+    })
+
+
     $WindowAddTask = New-Object system.Windows.Forms.Form
     $WindowAddTask.Width = 400
     $WindowAddTask.Height = 500
     $WindowAddTask.text = "Żubradmin - Dodaj Zadanie"
-    $WindowAddTask.Controls.AddRange(@($DropListClient,$TextTitle,$LabelTitle,$LabelDescription,$TextDescription,$LabelReporter,$CalenderResolve,$LabelResolve ))
+    $WindowAddTask.Controls.AddRange(@($DropListClient,$TextTitle,$LabelTitle,$LabelDescription,$TextDescription,$LabelReporter,$CalenderResolve,$LabelResolve,$ButtonCancel,$ButtonAdd ))
     $WindowAddTask.ShowDialog()
+
     
 }
 
@@ -276,9 +289,7 @@ function New-Label-Header {
 
     return $label
 }
-
-$Button_Click = 
-{
+$Button_Click = {
     param($sender,$eventarg)
     Write-Host $currentbutton.desc
     [System.Windows.Forms.Button] $currentbutton=$sender
@@ -311,7 +322,6 @@ $Button_Click =
     Write-Host $currentbutton.desc
     $WindowTask.ShowDialog()
 }
-
 function New-Button {
     [CmdletBinding()]
     Param(
@@ -340,7 +350,22 @@ function New-Button {
 
     return $button
 }
+function New-Button-Simple {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$true)]
+        [string]$Location,
+        [Parameter(Mandatory=$true)]
+        [string]$Text = ''
+    )
+    $button = New-Object Windows.Forms.Button
+    $button.Location = $Location
+    $button.Text     = $Text
+    
 
+
+    return $button
+}
 
 
 

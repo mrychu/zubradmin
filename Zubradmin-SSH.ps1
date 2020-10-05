@@ -34,7 +34,7 @@ $ButtonSSHDel.Text = "Usuń"
 $ButtonSSHDel.Location = New-Object System.Drawing.Point(170,80)
 $ButtonSSHDel.Add_Click(
 {
-    $content = Get-Content ".\SSHClients.json" -Raw
+    $content = Get-Content "$PSScriptRoot\SSHClients.json" -Raw
     $JsonParameters = ConvertFrom-Json -InputObject $content
     $toRemoveName = $DropListClient.SelectedItem
     $length_contacts = $JsonParameters.Clients.Length
@@ -59,7 +59,7 @@ $ButtonSSHDel.Add_Click(
     Write-Host = $newjson.Clients
     $newjson | ConvertTo-Json -Depth 100 | Out-File "SSHClients.json"
     @($JsonParameters.Clients.Name) | ForEach-Object {[void] $DropListClient.Items.Remove($_)}
-    $content = Get-Content ".\SSHClients.json" -Raw
+    $content = Get-Content "$PSScriptRoot\SSHClients.json" -Raw
     $JsonParameters = ConvertFrom-Json -InputObject $content
     @($JsonParameters.Clients.Name) | ForEach-Object {[void] $DropListClient.Items.Add($_)}
     ##$json_host.Clients += [pscustomobject] @{Name = $host_name; IP = $host_address}
@@ -75,7 +75,7 @@ $ButtonSSHAdd.Add_Click(
     & .\Zubradmin-SSHAddHost.ps1
     ###Dodawanie do listy rozwijanej###
     @($JsonParameters.Clients.Name) | ForEach-Object {[void] $DropListClient.Items.Remove($_)}
-    $content = Get-Content ".\SSHClients.json" -Raw
+    $content = Get-Content "$PSScriptRoot\SSHClients.json" -Raw
     $JsonParameters = ConvertFrom-Json -InputObject $content
     @($JsonParameters.Clients.Name) | ForEach-Object {[void] $DropListClient.Items.Add($_)}
     $DropListClient.location = New-Object System.Drawing.Point(20,50)

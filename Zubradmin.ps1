@@ -17,7 +17,7 @@ $ButtonTasker.Text = "Tasker"
 $ButtonTasker.Location = New-Object System.Drawing.Point(30,30)
 $ButtonTasker.Add_Click(
 {
-    $execute = $Location.Path + "\Zubradmin-Tasker.ps1"
+    $execute = "$PSScriptRoot\Zubradmin-Tasker.ps1"
     Write-Host $execute
     & ($execute)
 })
@@ -28,7 +28,7 @@ $ButtonSSHExtern.Location = New-Object System.Drawing.Point(30,60)
 $ButtonSSHExtern.Add_Click(
 {
     #Invoke-Expression (start powershell ((Split-Path $MyInvocation.InvocationName) + "\Zubradmin-SSH.ps1"))
-    $execute = $Location.Path + "\Zubradmin-SSH.ps1"
+    $execute = "$PSScriptRoot\Zubradmin-SSH.ps1"
     Write-Host $execute
     & ($execute)
 })
